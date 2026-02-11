@@ -1,95 +1,125 @@
-var express = require("express"); 
-const path = require('path');
-const cfenv = require('cfenv');
+const express = require("express");
+const path = require("path");
 
-var app  =  express(); 
-var appEnv = cfenv.getAppEnv();
-var url = process.env.url
-app.set('port', (process.env.PORT || 9981))
-app.use(express.static(__dirname + '/images'))
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+// Serve existing images folder
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
-/*
-app.get("/getCall", function(req,res){ 
-console.log("GET Method caled");
-console.log(__dirname);
+// Home Page
+app.get("/", (req, res) => {
+    res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Kani Technologies</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f6f9;
+            }
+            header {
+                background-color: #1e3a8a;
+                color: white;
+                padding: 20px;
+                text-align: center;
+            }
+            header img {
+                width: 140px;
+                margin-bottom: 10px;
+            }
+            nav {
+                background-color: #111827;
+                padding: 10px;
+                text-align: center;
+            }
+            nav a {
+                color: white;
+                margin: 0 15px;
+                text-decoration: none;
+                font-weight: bold;
+            }
+            nav a:hover {
+                color: #38bdf8;
+            }
+            section {
+                padding: 40px;
+                text-align: center;
+            }
+            footer {
+                background-color: #1e3a8a;
+                color: white;
+                text-align: center;
+                padding: 15px;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
 
-res.send("<h2>Welcome to Node JS express app</h2>"+appEnv.url+appEnv.port+port+process.env.LOGNAME);
+        <header>
+            <img src="/images/kani-logo.jpg" alt="Kani Logo">
+            <h1>Kani Technologies</h1>
+            <p>DevOps | Cloud | Automation | CI/CD</p>
+        </header>
 
-}).listen(9009);
-console.log(__dirname+"/images/mithunlogo.jpg");
-*/
-app.get('/mithuntechnologies', function(request, response) {
-    //response.send("<h2><center>Welcome to Node JS app</h2>");
-    response.set("Content-Type","text/html");
-    response.write("<h2><center><u>Sameple Node JS  Application </u></center></h2>");
-	
-    response.write("<h2><center>Welcome to  Mithun Technologies. Please Contact +91-9980923226  +91-9980923216 +91-9014996877 for more information or send an email to devopstrainingblr@gmail.com <center></h2>" );
-    response.end();
-    
-  })
- 
-  app.get('/docker', function(request, response) {
-    //response.send("<h2><center>Welcome to Node JS app</h2>");
-    response.write("<h2><center><u>Node JS  Sample App </u></center></h2>");
-	
-    response.write("<h2><center>Welcome to  Docker</h2>" );
-    response.write("<h2><center>Welcome to  Mithun Technologies. Please Contact +91-9980923226  +91-9980923216 +91-9014996877 for more information or send an email to devopstrainingblr@gmail.com <center></h2>" );
-    response.end();
-    
-  })
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+        </nav>
 
+        <section>
+            <h2>Welcome to Kani Technologies 🚀</h2>
+            <p>We provide professional DevOps and Cloud training solutions.</p>
+        </section>
 
-//app.get("/html", function(req,res){
-app.get("/html", function(req,res){
-    res.set("Content-Type","text/html");
-    //res.contentType("html") ; 
-    res.write("<h2>Welcome</h2>");
-    res.write("<h2>/html call</h2>");
-    //must end 
-    res.end();
-    
-    });
-    app.get("/jsonData", function(req,res){
-        res.type('json');
-        //res.type('application/json');
-        //res.json({'name': 'Mithun Reddy L'});
-        res.send({
-		'name': 'Mithun Technologies',
-		'technology': 'DevOps',
-		'contact' : '9980923226',
-		'email': 'devopstrainingblr@gmail.com'
-	            });
-        
-        });
-app.get("/queryparam", function(req,res){
-//res.send(req.query);
-res.send(req.query.key + ": " + req.query.name);
+        <footer>
+            📞 +91-9773819210 | 📧 devopstraining@gmail.com  
+            <br>© 2026 Kani Technologies | All Rights Reserved
+        </footer>
+
+    </body>
+    </html>
+    `);
 });
 
-app.get("/status-code-404", function(req, res) {
-    //set content-type to application/json
-    //res.sendStatus(404);
-      res.status(404).send('Sorry, we cannot find that!');
-})
+// About Page
+app.get("/about", (req, res) => {
+    res.send(`
+    <h1>About Kani Technologies</h1>
+    <p>We specialize in DevOps tools like Docker, Kubernetes, Jenkins, AWS, Terraform and more.</p>
+    <a href="/">Back to Home</a>
+    `);
+});
 
-app.get("/status-code-500", function(req, res) {
-    //set content-type to application/json
-    //res.sendStatus(500);
-   res.status(500).send('Internal Server Error – custom message');
-})
+// Contact Page
+app.get("/contact", (req, res) => {
+    res.send(`
+    <h1>Contact Us</h1>
+    <p>📞 +91-9773819210</p>
+    <p>📧 devopstraining@gmail.com</p>
+    <a href="/">Back to Home</a>
+    `);
+});
 
-app.get('/redirect', function(req, res) {
-    //Send status 300
-        res.redirect('http://mithuntechnologies.com');
+// API Route
+app.get("/api/info", (req, res) => {
+    res.json({
+        company: "Kani Technologies",
+        focus: "DevOps & Cloud Training",
+        contact: "9773819210",
+        email: "devopstraining@gmail.com"
     });
-    
- 
-    app.listen(app.get('port'), function() {
-        console.log("Node JS app is running at http://localhost:" + app.get('port') +"/mithuntechnologies");
-      })
-    
+});
 
-
-
+// Start Server
+app.listen(PORT, () => {
+    console.log(`Kani Technologies website running at http://localhost:${PORT}`);
+});
 
