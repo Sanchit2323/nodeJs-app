@@ -27,7 +27,6 @@ stages {
             script {
                 def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
                 def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-
                 notifySlack(":rocket: STARTED", repo, branch)
             }
         }
@@ -89,7 +88,6 @@ post {
         script {
             def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
             def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-
             notifySlack(":white_check_mark: SUCCESS", repo, branch)
         }
     }
@@ -98,7 +96,6 @@ post {
         script {
             def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
             def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-
             notifySlack(":x: FAILURE", repo, branch)
         }
     }
@@ -107,7 +104,6 @@ post {
         script {
             def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
             def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-
             notifySlack(":warning: UNSTABLE", repo, branch)
         }
     }
