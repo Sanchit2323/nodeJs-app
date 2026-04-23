@@ -123,7 +123,7 @@ Job: ${env.JOB_NAME}
 Build: #${env.BUILD_NUMBER}
 Branch: ${branch}
 Repo: ${repo}
-URL: ${env.BUILD_URL}
+Build_URL: ${env.BUILD_URL}
 """
 
 def payload = groovy.json.JsonOutput.toJson([text: msg])
