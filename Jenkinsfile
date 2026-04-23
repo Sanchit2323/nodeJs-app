@@ -118,18 +118,21 @@ def notifySlack(status, repo, branch) {
     def msg = """
 ${status}
 
-:package: Job   : ${env.JOB_NAME}
-:1234: Build : #${env.BUILD_NUMBER}
-:herb: Branch : ${branch}
-:file_folder: Repo  : ${repo}
-:link: URL   : ${env.BUILD_URL}
+Job: ${env.JOB_NAME}
+Build: #${env.BUILD_NUMBER}
+Branch: ${branch}
+Repo: ${repo}
+URL: ${env.BUILD_URL}
 """
+
+    // escape JSON safely
+    def payload = groovy.json.JsonOutput.toJson([text: msg])
 
     try {
         sh """
-        curl -X POST -H 'Content-type: application/json' \
-        --data '{"text":"${msg}"}' \
-        ${SLACK_WEBHOOK}
+        curl -X POST -H "Content-type: application/json" \
+        --data '${payload}' \
+        "${SLACK_WEBHOOK}"
         """
     } catch (err) {
         echo "Slack notification failed"
