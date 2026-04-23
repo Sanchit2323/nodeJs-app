@@ -107,15 +107,12 @@ post {
         }
     }
 }
-```
 
 }
 
 def notifySlack(status, repo, branch) {
 
-```
 def msg = """
-```
 
 ${status}
 
@@ -126,7 +123,6 @@ Repo: ${repo}
 URL: ${env.BUILD_URL}
 """
 
-```
 def payload = groovy.json.JsonOutput.toJson([text: msg])
 
 try {
@@ -138,6 +134,5 @@ try {
 } catch (err) {
     echo "Slack notification failed"
 }
-```
 
 }
