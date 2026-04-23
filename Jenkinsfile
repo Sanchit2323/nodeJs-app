@@ -9,7 +9,11 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'npm install'
+                sh '''
+                npm config set strict-ssl false
+                npm config set registry http://registry.npmjs.org/
+                npm install
+                '''
             }
         }
 
