@@ -126,13 +126,13 @@ URL: ${env.BUILD_URL}
 def payload = groovy.json.JsonOutput.toJson([text: msg])
 
 try {
-    sh(script: """
-    curl -X POST -H "Content-type: application/json" \
-    --data '${payload}' \
-    "${env.SLACK_WEBHOOK}"
-    """)
+    withCredentials([string(credentialsId: 'slack-webhook', variable: 'SLACK_URL')]) {
+        sh """
+        curl -X POST -H "Content-type: application/json" \
+        --data '${payload}' \
+        \$SLACK_URL
+        """
+    }
 } catch (err) {
     echo "Slack notification failed"
-}
-
 }
