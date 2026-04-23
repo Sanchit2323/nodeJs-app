@@ -136,3 +136,5 @@ try {
 } catch (err) {
     echo "Slack notification failed"
 }
+    
+}    
