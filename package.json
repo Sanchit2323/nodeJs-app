@@ -11,7 +11,7 @@
     "start1": "nodemon app.js",
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sonar": "node sonar-project.js"
+    "sonar": "node sonar-project.js",
     "test:unit": "jest --coverage",
     "test:integration": "echo integration test",
     "test:e2e": "echo e2e test"
@@ -29,7 +29,7 @@
         "statements": 80
       }
     }
-  }
+  },
   "dependencies": {
     "cfenv": "^1.1.0",
     "express": "^4.16.4"
