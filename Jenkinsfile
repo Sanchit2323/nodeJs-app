@@ -21,6 +21,9 @@ stages {
     }
 
     stage('Start') {
+        when {
+            branch 'main'
+        }
         steps {
             echo "Pipeline Started"
             script {
