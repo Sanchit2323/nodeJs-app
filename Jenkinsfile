@@ -10,10 +10,9 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                npm config set registry https://registry.npmjs.org/
-                npm config set strict-ssl false
-                npm config set fetch-retry-maxtimeout 600000
-                npm install --legacy-peer-deps
+                rm -rf node_modules package-lock.json
+                npm cache clean --force
+                npm install
                 '''
             }
         }
