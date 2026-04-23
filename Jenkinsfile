@@ -10,8 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                npm config set strict-ssl false
-                npm config set registry http://registry.npmjs.org/
+                export NODE_OPTIONS=--openssl-legacy-provider
                 npm install
                 '''
             }
