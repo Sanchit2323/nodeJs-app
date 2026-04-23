@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         EMAIL_TO = "sanchitkumar0307@gmail.com"
-        SLACK_WEBHOOK = "https://hooks.slack.com/services/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"
+        SLACK_WEBHOOK = "https://hooks.slack.com/services/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"
         REPO_URL = "https://github.com/kaniprabhu2/nodeJs-app.git"
         PORT = "5000"
     }
