@@ -43,7 +43,7 @@ stages {
     stage('Test') {
         steps {
             catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
-                sh 'npm test' || true'
+                sh 'npm test || true'
             }
         }
     }
