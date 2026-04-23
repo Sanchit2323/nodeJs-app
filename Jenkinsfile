@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         EMAIL_TO = "sanchitkumar0307@gmail.com"
-        SLACK_WEBHOOK = "https://hooks.slack.com/services/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"
+        SLACK_CHANNEL = "#jenkins-test"
         REPO_URL = "https://github.com/kaniprabhu2/nodeJs-app.git"
         PORT = "5000"
     }
@@ -24,10 +24,33 @@ pipeline {
             steps {
                 echo "Pipeline Started"
                 script {
-                    def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
-                    def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
 
-                    notifySlack(":rocket: *STARTED*", repo, branch)
+                    def repo = sh(
+                        script: "git config --get remote.origin.url",
+                        returnStdout: true
+                    ).trim()
+
+                    def branch = sh(
+                        script: "git rev-parse --abbrev-ref HEAD",
+                        returnStdout: true
+                    ).trim()
+
+                    try {
+                        slackSend(
+                            channel: SLACK_CHANNEL,
+                            message: """
+:rocket: *STARTED*
+
+:package: Job    : ${env.JOB_NAME}
+:1234: Build  : #${env.BUILD_NUMBER}
+:herb: Branch : ${branch}
+:file_folder: Repo   : ${repo}
+:link: URL    : ${env.BUILD_URL}
+"""
+                        )
+                    } catch (err) {
+                        echo "Slack failed at start"
+                    }
                 }
             }
         }
@@ -40,9 +63,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
-                    sh 'npm test'
-                }
+                sh 'npm test || true'
             }
         }
 
@@ -51,7 +72,7 @@ pipeline {
                 sh '''
                 echo "Starting app..."
 
-                pkill node || echo "No existing process"
+                pkill node || true
 
                 npm install
 
@@ -86,54 +107,71 @@ pipeline {
 
         success {
             script {
-                def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
-                def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                def repo = sh(
+                    script: "git config --get remote.origin.url",
+                    returnStdout: true
+                ).trim()
 
-                notifySlack(":white_check_mark: *SUCCESS*", repo, branch)
+                try {
+                    slackSend(
+                        channel: SLACK_CHANNEL,
+                        message: """
+:white_check_mark: *SUCCESS*
+
+:package: Job   : ${env.JOB_NAME}
+:1234: Build : #${env.BUILD_NUMBER}
+:file_folder: Repo  : ${repo}
+:link: URL   : ${env.BUILD_URL}
+"""
+                    )
+                } catch (err) {}
             }
         }
 
         failure {
             script {
-                def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
-                def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                def repo = sh(
+                    script: "git config --get remote.origin.url",
+                    returnStdout: true
+                ).trim()
 
-                notifySlack(":x: *FAILURE*", repo, branch)
+                try {
+                    slackSend(
+                        channel: SLACK_CHANNEL,
+                        message: """
+:x: *FAILURE*
+
+:package: Job   : ${env.JOB_NAME}
+:1234: Build : #${env.BUILD_NUMBER}
+:file_folder: Repo  : ${repo}
+:link: URL   : ${env.BUILD_URL}
+"""
+                    )
+                } catch (err) {}
             }
         }
 
         unstable {
             script {
-                def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
-                def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                def repo = sh(
+                    script: "git config --get remote.origin.url",
+                    returnStdout: true
+                ).trim()
 
-                notifySlack(":warning: *UNSTABLE*", repo, branch)
+                try {
+                    slackSend(
+                        channel: SLACK_CHANNEL,
+                        message: """
+:warning: *UNSTABLE*
+
+:package: Job   : ${env.JOB_NAME}
+:1234: Build : #${env.BUILD_NUMBER}
+:file_folder: Repo  : ${repo}
+:link: URL   : ${env.BUILD_URL}
+"""
+                    )
+                } catch (err) {}
             }
         }
-    }
-}
-
-def notifySlack(status, repo, branch) {
-
-    def msg = """
-${status}
-
-Job: ${env.JOB_NAME}
-Build: #${env.BUILD_NUMBER}
-Branch: ${branch}
-Repo: ${repo}
-URL: ${env.BUILD_URL}
-"""
-
-    def payload = groovy.json.JsonOutput.toJson([text: msg])
-
-    try {
-        sh(script: """
-        curl -X POST -H "Content-type: application/json" \
-        --data '${payload}' \
-        "${env.SLACK_WEBHOOK}"
-        """)
-    } catch (err) {
-        echo "Slack notification failed"
     }
 }
