@@ -10,8 +10,10 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                export NODE_OPTIONS=--openssl-legacy-provider
-                npm install
+                npm config set registry https://registry.npmjs.org/
+                npm config set strict-ssl false
+                npm config set fetch-retry-maxtimeout 600000
+                npm install --legacy-peer-deps
                 '''
             }
         }
