@@ -52,5 +52,15 @@ pipeline {
                 archiveArtifacts artifacts: 'coverage/**', fingerprint: true
             }
         }
+        stage('Generate PDF Report') {
+            steps {
+                sh '''
+                echo "Test Report" > report.txt
+                echo "Build: $BUILD_NUMBER" >> report.txt
+                echo "Status: SUCCESS" >> report.txt
+                '''
+                archiveArtifacts artifacts: 'report.txt'
+            }
+        }
     }
 }
