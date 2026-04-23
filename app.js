@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Kani Technologies</title>
+        <title></title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -64,7 +64,7 @@ app.get("/", (req, res) => {
 
         <header>
             <img src="/images/kani-logo.jpg" alt="Kani Logo">
-            <h1>Kani Technologies</h1>
+            <h1>Sanchit Technologies</h1>
             <p>DevOps | Cloud | Automation | CI/CD</p>
         </header>
 
@@ -75,13 +75,13 @@ app.get("/", (req, res) => {
         </nav>
 
         <section>
-            <h2>Welcome to Kani Technologies 🚀</h2>
+            <h2>Welcome to Sanchit Technologies 🚀</h2>
             <p>We provide professional DevOps and Cloud training solutions.</p>
         </section>
 
         <footer>
-            📞 +91-9773819210 | 📧 devopstraining@gmail.com  
-            <br>© 2026 Kani Technologies | All Rights Reserved
+            📞 +91-9717489404 | 📧 devopstraining@gmail.com  
+            <br>© 2026 Sanchit Technologies | All Rights Reserved
         </footer>
 
     </body>
@@ -92,7 +92,7 @@ app.get("/", (req, res) => {
 // About Page
 app.get("/about", (req, res) => {
     res.send(`
-    <h1>About Kani Technologies</h1>
+    <h1>About Sanchit Technologies</h1>
     <p>We specialize in DevOps tools like Docker, Kubernetes, Jenkins, AWS, Terraform and more.</p>
     <a href="/">Back to Home</a>
     `);
@@ -111,15 +111,15 @@ app.get("/contact", (req, res) => {
 // API Route
 app.get("/api/info", (req, res) => {
     res.json({
-        company: "Kani Technologies",
+        company: "Sanchit Technologies",
         focus: "DevOps & Cloud Training",
-        contact: "9773819210",
+        contact: "9717489404",
         email: "devopstraining@gmail.com"
     });
 });
 
 // Start Server
 app.listen(PORT, () => {
-    console.log(`Kani Technologies website running at http://localhost:${PORT}`);
+    console.log(`Sanchit Technologies website running at http://localhost:${PORT}`);
 });
 
