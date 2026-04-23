@@ -125,15 +125,14 @@ Repo: ${repo}
 URL: ${env.BUILD_URL}
 """
 
-    // escape JSON safely
     def payload = groovy.json.JsonOutput.toJson([text: msg])
 
     try {
-        sh """
+        sh(script: """
         curl -X POST -H "Content-type: application/json" \
         --data '${payload}' \
-        "${SLACK_WEBHOOK}"
-        """
+        "${env.SLACK_WEBHOOK}"
+        """)
     } catch (err) {
         echo "Slack notification failed"
     }
