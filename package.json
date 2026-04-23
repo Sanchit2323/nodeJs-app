@@ -12,8 +12,11 @@
   "jest": {
     "reporters": [
       "default",
-      "jest-junit"
-    ],
+      ["jest-junit", {
+        "outputDirectory": "reports",
+        "outputName": "junit.xml"
+      }]
+  ],
     "coverageThreshold": {
       "global": {
         "branches": 80,
