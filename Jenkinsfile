@@ -80,6 +80,9 @@ pipeline {
                     -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                     -Dsonar.exclusions=node_modules/**,coverage/** \
                     -Dsonar.test.inclusions=tests/**
+                    -Dsonar.pullrequest.key=${env.CHANGE_ID} \
+                    -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
+                    -Dsonar.pullrequest.base=${env.CHANGE_TARGET}
                     """
                 }
             }
