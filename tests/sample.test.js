@@ -90,4 +90,36 @@ describe("Function Tests", () => {
     expect(add(-2, 3)).toBe(1);
   });
 
+  test("add zero case", () => {
+    expect(add(0, 0)).toBe(0);
+  });
+
+  test("add large numbers", () => {
+    expect(add(1000, 2000)).toBe(3000);
+  });
+
+// MULTIPLY EDGE CASES
+  test("multiply negative numbers", () => {
+    expect(multiply(-2, 3)).toBe(-6);
+  });
+
+  test("multiply both negative", () => {
+    expect(multiply(-2, -3)).toBe(6);
+  });
+
+  test("multiply with zero", () => {
+    expect(multiply(0, 10)).toBe(0);
+  });
+
+// API EDGE CASES
+  test("GET invalid route", async () => {
+    const res = await request(app).get("/random");
+    expect(res.statusCode).toBe(404);
+  });
+
+// INVALID INPUT CASE (important for coverage)
+  test("add invalid input", () => {
+    expect(add("a", 2)).toBeNaN();
+  });
+
 });
