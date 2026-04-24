@@ -61,5 +61,33 @@ pipeline {
                 archiveArtifacts artifacts: 'report.pdf'
             }
         }
+        post {
+
+            always {
+                echo 'Notification sent'
+            }
+
+            success {
+                slackSend channel: '#devops',
+                message: "✅ SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}"
+
+                emailext(
+                    subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: "Build Successful\n${env.BUILD_URL}",
+                    to: "your-email@gmail.com"
+                )
+            }
+
+            failure {
+                slackSend channel: '#devops',
+                message: "❌ FAILED: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}"
+
+                emailext(
+                    subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: "Build Failed\n${env.BUILD_URL}",
+                    to: "your-email@gmail.com"
+                )
+            }
+        }
     }
 }
