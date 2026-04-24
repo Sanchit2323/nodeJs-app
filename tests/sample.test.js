@@ -36,6 +36,14 @@ describe("API Tests", () => {
     expect(app).toBeDefined();
   });
 
+  test("multiply normal", () => {
+    expect(appModule.multiply(2, 3)).toBe(6);
+  });
+
+  test("multiply zero case", () => {
+    expect(appModule.multiply(0, 5)).toBe(0);
+  });
+
 });
 
 describe("Function Tests", () => {
