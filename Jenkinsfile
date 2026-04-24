@@ -173,6 +173,11 @@ pipeline {
 
 def notifySlack(status, repo, branch) {
 
+    def duration = currentBuild.durationString
+
+    def reportUrl = "${env.BUILD_URL}artifact/report.pdf"
+    def consoleUrl = "${env.BUILD_URL}console"
+
     def msg = """
 ${status}
 
@@ -180,7 +185,11 @@ Job: ${env.JOB_NAME}
 Build: #${env.BUILD_NUMBER}
 Branch: ${branch}
 Repo: ${repo}
-Build_URL: ${env.BUILD_URL}
+
+Duration: ${duration}
+
+Report: ${reportUrl}
+Logs: ${consoleUrl}
 """
 
     def payload = groovy.json.JsonOutput.toJson([text: msg])
