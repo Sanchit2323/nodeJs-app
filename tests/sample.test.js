@@ -1,3 +1,4 @@
+const { add, multiply } = require('../app');
 const request = require("supertest");
 const appModule = require("../app");
 
