@@ -44,6 +44,18 @@ describe("API Tests", () => {
     expect(appModule.multiply(0, 5)).toBe(0);
   });
 
+  test("add zero case", () => {
+    expect(add(0, 0)).toBe(0);
+  });
+
+  test("multiply negative numbers", () => {
+    expect(multiply(-2, 3)).toBe(-6);
+  });
+
+  test("multiply both negative", () => {
+    expect(multiply(-2, -3)).toBe(6);
+  });
+
 });
 
 describe("Function Tests", () => {
