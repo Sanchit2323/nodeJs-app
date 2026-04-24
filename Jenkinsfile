@@ -71,19 +71,27 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh """
-                    npx sonar-scanner \
-                    -Dsonar.projectKey=nodejs-app \
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=$SONAR_HOST_URL \
-                    -Dsonar.login=$SONAR_AUTH_TOKEN \
-                    -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                    -Dsonar.exclusions=node_modules/**,coverage/** \
-                    -Dsonar.test.inclusions=tests/**
-                    -Dsonar.pullrequest.key=${env.CHANGE_ID} \
-                    -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
-                    -Dsonar.pullrequest.base=${env.CHANGE_TARGET}
-                    """
+                    script {
+                        def sonarCmd = """
+                        npx sonar-scanner \
+                        -Dsonar.projectKey=nodejs-app \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://sonar:9000 \
+                        -Dsonar.login=${SONAR_AUTH_TOKEN} \
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                        -Dsonar.exclusions=node_modules/**,coverage/**
+                        """
+
+                // 👇 ONLY add PR params if PR build
+                        if (env.CHANGE_ID) {
+                            sonarCmd += """
+                            -Dsonar.pullrequest.key=${env.CHANGE_ID} \
+                            -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
+                            -Dsonar.pullrequest.base=${env.CHANGE_TARGET}
+                            """
+                        }
+
+                        sh sonarCmd
                 }
             }
         }
