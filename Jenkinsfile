@@ -48,7 +48,7 @@ pipeline {
 
         stage('Reports') {
             steps {
-                junit 'reports/junit.xml'
+                junit 'reports/*.xml'
                 archiveArtifacts artifacts: 'coverage/**', fingerprint: true
             }
         }
