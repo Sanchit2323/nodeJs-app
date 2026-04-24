@@ -1,23 +1,24 @@
 {
   "name": "nodejsexamples",
   "version": "1.0.0",
-  "description": "Node JS Testing App",
+  "description": "Node JS examples",
   "main": "app.js",
-
   "scripts": {
     "start": "node app.js",
-    "test:unit": "jest --coverage",
+    "test:unit": "jest --coverage --reporters=default --reporters=jest-junit",
     "test:integration": "echo integration test",
     "test:e2e": "echo e2e test"
   },
-
   "jest": {
     "reporters": [
       "default",
-      ["jest-junit", {
-        "outputDirectory": "reports",
-        "outputName": "junit.xml"
-      }]
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "reports",
+          "outputName": "junit.xml"
+        }
+      ]
     ],
     "coverageThreshold": {
       "global": {
@@ -28,15 +29,17 @@
       }
     }
   },
-
+  "jest-junit": {
+    "outputDirectory": "./reports",
+    "outputName": "junit.xml"
+  },
   "dependencies": {
     "express": "^4.16.4"
   },
-
   "devDependencies": {
     "jest": "^29.0.0",
     "jest-junit": "^16.0.0",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.4",
     "html-pdf": "^3.0.1"
   }
 }
