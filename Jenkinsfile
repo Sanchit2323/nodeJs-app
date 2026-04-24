@@ -72,6 +72,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     script {
+
                         def sonarCmd = """
                         npx sonar-scanner \
                         -Dsonar.projectKey=nodejs-app \
@@ -79,10 +80,12 @@ pipeline {
                         -Dsonar.host.url=http://sonar:9000 \
                         -Dsonar.login=${SONAR_AUTH_TOKEN} \
                         -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                        -Dsonar.exclusions=node_modules/**,coverage/**
+                        -Dsonar.exclusions=node_modules/**,coverage/** \
+                        -Dsonar.tests=tests \
+                        -Dsonar.test.inclusions=tests/**/*.js
                         """
 
-                // 👇 ONLY add PR params if PR build
+                        // 👉 PR decoration (ye rehne de)
                         if (env.CHANGE_ID) {
                             sonarCmd += """
                             -Dsonar.pullrequest.key=${env.CHANGE_ID} \
@@ -91,11 +94,12 @@ pipeline {
                             """
                         }
 
-                        sh sonarCmd
+                // 👇 IMPORTANT FIX
+                        sh sonarCmd.stripIndent().trim()
+                    }
                 }
             }
-        }
-    }      
+        }      
 
         stage('Quality Gate') {
             steps {
