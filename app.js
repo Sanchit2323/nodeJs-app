@@ -119,14 +119,13 @@ app.get("/api/info", (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-    console.log(`Sanchit Technologies website running at http://localhost:${PORT}`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Sanchit Technologies website running at http://localhost:${PORT}`);
+    });
+}
 
-app.listen(PORT, () => {
-    console.log(`Sanchit Technologies website running at http://localhost:${PORT}`);
-});
-
+// Function for testing
 function add(a, b) {
     return a + b;
 }
