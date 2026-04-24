@@ -74,6 +74,46 @@ describe("API Tests", () => {
     expect(add(0, 5)).toBe(5);
   });
 
+  test("multiply normal", () => {
+    expect(multiply(2, 3)).toBe(6);
+  });
+
+  test("multiply zero case", () => {
+    expect(multiply(0, 5)).toBe(0);
+  });
+
+  test("multiply zero second param", () => {
+    expect(multiply(5, 0)).toBe(0);
+  });
+  
+  test("multiply normal", () => {
+    expect(multiply(2, 3)).toBe(6);
+  });
+
+  test("multiply zero case", () => {
+    expect(multiply(0, 5)).toBe(0);
+  });
+
+  test("multiply zero second param", () => {
+    expect(multiply(5, 0)).toBe(0);
+  });
+
+  test("multiply negative numbers", () => {
+    expect(multiply(-2, 3)).toBe(-6);
+  });
+
+  test("multiply both negative", () => {
+    expect(multiply(-2, -3)).toBe(6);
+  });
+  
+  test("multiply negative numbers", () => {
+    expect(multiply(-2, 3)).toBe(-6);
+  });
+
+  test("multiply both negative", () => {
+    expect(multiply(-2, -3)).toBe(6);
+  });
+
 });
 
 describe("Function Tests", () => {
