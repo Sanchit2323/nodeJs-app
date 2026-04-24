@@ -32,6 +32,10 @@ describe("API Tests", () => {
     expect(res.statusCode).toBe(404);
   });
 
+  test("app should be defined", () => {
+    expect(app).toBeDefined();
+  });
+
 });
 
 describe("Function Tests", () => {
