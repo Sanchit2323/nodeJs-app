@@ -5,7 +5,29 @@ pipeline {
         nodejs 'node18'
     }
 
+    environment {
+        EMAIL_TO = "sanchitkumar0307@gmail.com"
+        REPO_URL = "https://github.com/Sanchit2323/nodeJs-app.git"
+    }
+
     stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: "${REPO_URL}"
+            }
+        }
+
+        stage('Start') {
+            steps {
+                echo "Pipeline Started"
+                script {
+                    def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
+                    def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                    notifySlack(":rocket: STARTED", repo, branch)
+                }
+            }
+        }
 
         stage('Build') {
             steps {
@@ -22,7 +44,7 @@ pipeline {
 
                 stage('Unit Test') {
                     steps {
-                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        catchError(buildResult: 'UNSTABLE') {
                             sh 'npm run test:unit'
                         }
                     }
@@ -30,7 +52,7 @@ pipeline {
 
                 stage('Integration Test') {
                     steps {
-                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        catchError(buildResult: 'UNSTABLE') {
                             sh 'npm run test:integration'
                         }
                     }
@@ -38,7 +60,7 @@ pipeline {
 
                 stage('E2E Test') {
                     steps {
-                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        catchError(buildResult: 'UNSTABLE') {
                             sh 'npm run test:e2e'
                         }
                     }
@@ -49,9 +71,10 @@ pipeline {
         stage('Reports') {
             steps {
                 junit 'reports/*.xml'
-                archiveArtifacts artifacts: 'reports/**, coverage/**, report.*', fingerprint: true
+                archiveArtifacts artifacts: 'coverage/**', fingerprint: true
             }
         }
+
         stage('Generate PDF Report') {
             steps {
                 sh '''
@@ -61,33 +84,75 @@ pipeline {
                 archiveArtifacts artifacts: 'report.pdf'
             }
         }
-        post {
+    }
 
-            always {
-                echo 'Notification sent'
-            }
+    post {
 
-            success {
-                slackSend channel: '#devops',
-                message: "✅ SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}"
+        always {
+            emailext(
+                to: "${EMAIL_TO}",
+                subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                mimeType: 'text/html',
+                body: """
+                <h2>Jenkins Build Report</h2>
+                <p><b>Job:</b> ${env.JOB_NAME}</p>
+                <p><b>Status:</b> ${currentBuild.currentResult}</p>
+                <p><b>Build:</b> #${env.BUILD_NUMBER}</p>
+                <p><b>Duration:</b> ${currentBuild.durationString}</p>
+                <p><a href="${env.BUILD_URL}console">View Logs</a></p>
+                """
+            )
+        }
 
-                emailext(
-                    subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Build Successful\n${env.BUILD_URL}",
-                    to: "your-email@gmail.com"
-                )
-            }
-
-            failure {
-                slackSend channel: '#devops',
-                message: "❌ FAILED: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}"
-
-                emailext(
-                    subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Build Failed\n${env.BUILD_URL}",
-                    to: "your-email@gmail.com"
-                )
+        success {
+            script {
+                def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
+                def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                notifySlack(":white_check_mark: SUCCESS", repo, branch)
             }
         }
+
+        failure {
+            script {
+                def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
+                def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                notifySlack(":x: FAILURE", repo, branch)
+            }
+        }
+
+        unstable {
+            script {
+                def repo = sh(script: "git config --get remote.origin.url", returnStdout: true).trim()
+                def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                notifySlack(":warning: UNSTABLE", repo, branch)
+            }
+        }
+    }
+}
+
+def notifySlack(status, repo, branch) {
+
+    def msg = """
+${status}
+
+Job: ${env.JOB_NAME}
+Build: #${env.BUILD_NUMBER}
+Branch: ${branch}
+Repo: ${repo}
+Build_URL: ${env.BUILD_URL}
+"""
+
+    def payload = groovy.json.JsonOutput.toJson([text: msg])
+
+    try {
+        withCredentials([string(credentialsId: 'slack-webhook', variable: 'SLACK_URL')]) {
+            sh """
+            curl -X POST -H "Content-type: application/json" \
+            --data '${payload}' \
+            \$SLACK_URL
+            """
+        }
+    } catch (err) {
+        echo "Slack notification failed"
     }
 }
