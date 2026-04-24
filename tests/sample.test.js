@@ -11,6 +11,11 @@ describe("API Tests", () => {
     expect(res.statusCode).toBe(200);
   });
 
+  test("GET unknown route", async () => {
+    const res = await request(app).get('/unknown');
+    expect(res.statusCode).toBe(404);
+  });
+
   test("GET /about", async () => {
     const res = await request(app).get("/about");
     expect(res.statusCode).toBe(200);
