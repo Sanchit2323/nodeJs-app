@@ -59,7 +59,7 @@ pipeline {
                 echo "Build: $BUILD_NUMBER" >> report.txt
                 echo "Status: SUCCESS" >> report.txt
                 '''
-                archiveArtifacts artifacts: 'report.txt'
+                archiveArtifacts artifacts: 'report.*'
             }
         }
     }
