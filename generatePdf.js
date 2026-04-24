@@ -1,21 +1,18 @@
+const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
-const htmlContent = `
-  <h1>Test Report</h1>
-  <p>Build: ${process.env.BUILD_NUMBER}</p>
-  <p>Status: SUCCESS</p>
-`;
+const doc = new PDFDocument();
 
-// Save HTML
-fs.writeFileSync('report.html', htmlContent);
+doc.pipe(fs.createWriteStream('report.pdf'));
 
-// REAL PDF-like content (basic)
-const pdfContent = `
-Test Report
-Build: ${process.env.BUILD_NUMBER}
-Status: SUCCESS
-`;
+doc.fontSize(20).text('Test Report', { align: 'center' });
 
-fs.writeFileSync('report.pdf', pdfContent);
+doc.moveDown();
 
-console.log("PDF generated");
+doc.fontSize(12).text(`Build: ${process.env.BUILD_NUMBER || 'Local'}`);
+doc.text(`Status: SUCCESS`);
+doc.text(`Generated At: ${new Date().toLocaleString()}`);
+
+doc.end();
+
+console.log("✅ REAL PDF generated successfully");
