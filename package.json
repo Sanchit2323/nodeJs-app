@@ -1,14 +1,16 @@
 {
   "name": "nodejsexamples",
   "version": "1.0.0",
-  "description": "This Project explains all Node JS examples",
+  "description": "Node JS Testing App",
   "main": "app.js",
+
   "scripts": {
     "start": "node app.js",
-    "test:unit": "jest --coverage --reporters=default --reporters=jest-junit",
+    "test:unit": "jest --coverage",
     "test:integration": "echo integration test",
     "test:e2e": "echo e2e test"
   },
+
   "jest": {
     "reporters": [
       "default",
@@ -16,21 +18,24 @@
         "outputDirectory": "reports",
         "outputName": "junit.xml"
       }]
-  ],
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 80,
         "functions": 80,
         "lines": 80,
-        "statements": 80"
+        "statements": 80
       }
     }
   },
+
   "dependencies": {
     "express": "^4.16.4"
   },
+
   "devDependencies": {
     "jest": "^29.0.0",
-    "jest-junit": "^16.0.0"
+    "jest-junit": "^16.0.0",
+    "supertest": "^6.3.3"
   }
 }
