@@ -55,12 +55,10 @@ pipeline {
         stage('Generate PDF Report') {
             steps {
                 sh '''
-                echo "<h1>Test Report</h1>" > report.html
-                echo "<p>Build: $BUILD_NUMBER</p>" >> report.html
-                echo "<p>Status: SUCCESS</p>" >> report.html
-                cp report.html report.pdf
+                npm install
+                node generatePdf.js
                 '''
-                archiveArtifacts artifacts: 'report.*'
+                archiveArtifacts artifacts: 'report.pdf'
             }
         }
     }
