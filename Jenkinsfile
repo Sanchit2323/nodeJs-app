@@ -71,14 +71,16 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh '''
+                    sh """
                     npx sonar-scanner \
                     -Dsonar.projectKey=nodejs-app \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=$SONAR_HOST_URL \
-                    -Dsonar.login=$SONAR_AUTH_TOKEN
-                    -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-                    '''
+                    -Dsonar.login=$SONAR_AUTH_TOKEN \
+                    -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                    -Dsonar.exclusions=node_modules/**,coverage/** \
+                    -Dsonar.test.inclusions=tests/**
+                    """
                 }
             }
         }
