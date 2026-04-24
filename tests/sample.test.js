@@ -12,6 +12,26 @@ describe("API Tests", () => {
     expect(res.statusCode).toBe(200);
   });
 
+  test("multiply normal", () => {
+    expect(multiply(2, 3)).toBe(6);
+  });
+
+  test("multiply zero first", () => {
+    expect(multiply(0, 5)).toBe(0);
+  });
+
+  test("multiply zero second", () => {
+    expect(multiply(5, 0)).toBe(0);
+  });
+
+  test("multiply negative", () => {
+    expect(multiply(-2, 3)).toBe(-6);
+  });
+
+  test("multiply both negative", () => {
+    expect(multiply(-2, -3)).toBe(6);
+  });
+
   test("GET unknown route", async () => {
     const res = await request(app).get('/unknown');
     expect(res.statusCode).toBe(404);
