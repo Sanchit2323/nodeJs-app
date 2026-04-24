@@ -27,6 +27,11 @@ describe("API Tests", () => {
     expect(res.body.company).toBe("Sanchit Technologies");
   });
 
+  test("GET invalid route should return 404", async () => {
+    const res = await request(app).get("/random");
+    expect(res.statusCode).toBe(404);
+  });
+
 });
 
 describe("Function Tests", () => {
