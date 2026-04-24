@@ -62,6 +62,18 @@ describe("API Tests", () => {
     expect(multiply(-2, -3)).toBe(6);
   });
 
+  test("multiply negative numbers", () => {
+    expect(multiply(-2, 3)).toBe(-6);
+  });
+
+  test("multiply both negative", () => {
+    expect(multiply(-2, -3)).toBe(6);
+  });
+
+  test("add zero", () => {
+    expect(add(0, 5)).toBe(5);
+  });
+
 });
 
 describe("Function Tests", () => {
