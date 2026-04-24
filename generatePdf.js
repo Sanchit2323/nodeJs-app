@@ -1,13 +1,24 @@
-const pdf = require("html-pdf");
+const fs = require('fs');
+const puppeteer = require('puppeteer');
 
-const html = `
-<h1>Test Report</h1>
-<p>Build: ${process.env.BUILD_NUMBER || "local"}</p>
-<p>Status: SUCCESS</p>
-<p>Generated from Jenkins Pipeline</p>
-`;
+(async () => {
+  const html = `
+    <h1>Test Report</h1>
+    <p>Build: ${process.env.BUILD_NUMBER}</p>
+    <p>Status: SUCCESS</p>
+  `;
 
-pdf.create(html).toFile("report.pdf", function(err, res) {
-  if (err) return console.log(err);
-  console.log("PDF generated:", res.filename);
-});
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+
+  const page = await browser.newPage();
+  await page.setContent(html);
+
+  await page.pdf({
+    path: 'report.pdf',
+    format: 'A4'
+  });
+
+  await browser.close();
+})();
