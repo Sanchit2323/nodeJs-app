@@ -1,9 +1,9 @@
-const { add, multiply } = require('../app');
 const request = require("supertest");
 const appModule = require("../app");
 
 const app = appModule.app;
 const add = appModule.add;
+const multiply = appModule.multiply;
 
 describe("API Tests", () => {
 
