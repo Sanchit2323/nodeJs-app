@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "test": "jest --coverage",
     "test:unit": "jest --coverage --reporters=default --reporters=jest-junit",
     "test:integration": "echo integration test",
     "test:e2e": "echo e2e test"
