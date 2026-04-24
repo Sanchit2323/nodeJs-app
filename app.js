@@ -38,14 +38,12 @@ function add(a, b) {
 }
 
 function multiply(a, b) {
-    if (a === 0 || b === 0) {
-        return 0;
-    }
+    if (a === 0 || b === 0) return 0;
     return a * b;
 }
 
 // ✅ EXPORT BOTH
-module.exports = { app, add };
+module.exports = { app, add, multiply };
 
 // ✅ Start server ONLY when running directly
 if (require.main === module) {
