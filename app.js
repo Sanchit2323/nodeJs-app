@@ -123,3 +123,13 @@ app.listen(PORT, () => {
     console.log(`Sanchit Technologies website running at http://localhost:${PORT}`);
 });
 
+app.listen(PORT, () => {
+    console.log(`Sanchit Technologies website running at http://localhost:${PORT}`);
+});
+
+function add(a, b) {
+    return a + b;
+}
+
+module.exports = { add };
+
