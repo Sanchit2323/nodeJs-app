@@ -151,6 +151,37 @@ describe("Function Tests", () => {
     expect(multiply(0, 10)).toBe(0);
   });
 
+  // ADD FUNCTION FULL COVERAGE
+
+  test("add valid numbers", () => {
+    expect(add(2, 3)).toBe(5);
+  });
+
+  test("add zero", () => {
+    expect(add(0, 0)).toBe(0);
+  });
+
+  test("add negative numbers", () => {
+    expect(add(-2, -3)).toBe(-5);
+  });
+
+  test("add mixed numbers", () => {
+    expect(add(-2, 3)).toBe(1);
+  });
+
+// IMPORTANT BRANCH CASES 🔥
+  test("add invalid string input", () => {
+    expect(add("a", 2)).toBeNaN();
+  });
+
+  test("add invalid second param", () => {
+    expect(add(2, "b")).toBeNaN();
+  });
+
+  test("add both invalid", () => {
+    expect(add("a", "b")).toBeNaN();
+  });
+
 // API EDGE CASES
   test("GET invalid route", async () => {
     const res = await request(app).get("/random");
