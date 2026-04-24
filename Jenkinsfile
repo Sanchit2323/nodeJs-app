@@ -56,7 +56,6 @@ pipeline {
             steps {
                 sh '''
                 apt-get update || true
-                apt-get install -y wkhtmltopdf || true
 
                 echo "<h1>Test Report</h1>" > report.html
                 echo "<p>Build: $BUILD_NUMBER</p>" >> report.html
