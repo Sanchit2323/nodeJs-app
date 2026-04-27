@@ -131,6 +131,8 @@ pipeline {
                 sh '''
                 echo "Deploying to DEV..."
 
+                cd /var/jenkins_home/workspace/Testing-Pipeline
+
         # old process kill
                 pkill node || true
 
