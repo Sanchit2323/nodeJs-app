@@ -49,8 +49,6 @@ function multiply(a, b) {
 module.exports = { app, add, multiply };
 
 // ✅ Start server ONLY when running directly
-if (require.main === module) {
-    app.listen(PORT, '0.0.0.0', () => {
-        console.log(`Server running on ${PORT}`);
-    });
-}
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on ${PORT}`);
+});
