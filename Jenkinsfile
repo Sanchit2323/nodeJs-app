@@ -125,6 +125,25 @@ pipeline {
                 archiveArtifacts artifacts: 'report.pdf'
             }
         }
+
+        stage('Deploy to Dev') {
+            steps {
+                sh '''
+                echo "Deploying to DEV..."
+
+        # old process kill
+                pkill node || true
+
+        # start app on PORT 5000 (BLUE)
+                nohup env PORT=3000 node app.js > dev.log 2>&1 &
+
+                sleep 5
+
+                echo "Running processes:"
+                ps -ef | grep node
+                '''
+            }
+        }
     }
 
     post {
