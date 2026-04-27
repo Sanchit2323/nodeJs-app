@@ -137,7 +137,7 @@ pipeline {
                 pkill node || true
 
         # start app on PORT 5000 (BLUE)
-                nohup env PORT=3000 node app.js > dev.log 2>&1 &
+                nohup env NODE_ENV=production PORT=3000 node app.js > dev.log 2>&1 &
 
                 sleep 5
 
