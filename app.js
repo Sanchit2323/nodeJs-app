@@ -49,6 +49,8 @@ function multiply(a, b) {
 module.exports = { app, add, multiply };
 
 // ✅ Start server ONLY when running directly
-app.listen(PORT, '0.0.0.0', () => {
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on ${PORT}`);
-});
+  });
+}
